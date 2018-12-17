@@ -22,7 +22,7 @@
                 <a href="#">立即注册</a>
             </div>
             <div class="form_input">
-                <form>
+                <form method="post" action="/login">
                     <input type="text" name="username" class="name_input" placeholder="请输入用户名">
                     <div class="user_error">输入错误</div>
                     <input type="password" name="pwd" class="pass_input" placeholder="请输入密码">
@@ -52,6 +52,6 @@
     <p>CopyRight © 2016 北京天天生鲜信息技术有限公司 All Rights Reserved</p>
     <p>电话：010-****888 京ICP备*******8号</p>
 </div>
-
+{{.error}}
 </body>
 </html>

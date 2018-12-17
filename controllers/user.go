@@ -127,3 +127,47 @@ func (this *UserController) HandleActive() {
 func (this *UserController) ShowLogin() {
 	this.TplName = "login.html"
 }
+
+// 处理登陆
+func (this *UserController) HandleLogin() {
+	// 获取用户输入的内容
+	usr := this.GetString("username")
+	psw := this.GetString("pwd")
+
+	// 检查用户名和密码是否为空
+	if usr == "" || psw == "" {
+		this.Data["error"] = "用户名密码不能为空"
+		this.TplName = "login.html"
+		return
+	}
+
+	// 查询
+	ormer := orm.NewOrm()
+	var user models.User
+	user.Name = usr
+	user.PassWord = psw
+	// 根据用户名查询用户是否存在
+	err := ormer.Read(&user, "Name")
+	if err != nil {
+		this.Data["error"] = "用户不存在,请重新登陆"
+		this.TplName = "login.html"
+		return
+	}
+
+	// 判断用户是否激活
+	if !user.Active {
+		this.Data["error"] = "用户未激活,请激活"
+		this.TplName = "login.html"
+		return
+	}
+
+	// 比对密码
+	if user.PassWord != psw {
+		this.Data["error"] = "密码错误,请重试"
+		this.TplName = "login.html"
+		return
+	}
+
+	// 跳转到主页
+	this.Redirect("/", 302)
+}
