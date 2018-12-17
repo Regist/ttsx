@@ -125,6 +125,18 @@ func (this *UserController) HandleActive() {
 
 // 展示登陆页面
 func (this *UserController) ShowLogin() {
+	// 从cookie中获取数据
+	username := this.Ctx.GetCookie("username")
+	if username == "" {
+		// cookie中没有数据,清空数据
+		this.Data["username"] = ""
+		this.Data["checked"] = ""
+	} else {
+		// cookie中有数据,设置数据
+		this.Data["username"] = username
+		this.Data["checked"] = "checked"
+	}
+
 	this.TplName = "login.html"
 }
 
@@ -166,6 +178,17 @@ func (this *UserController) HandleLogin() {
 		this.Data["error"] = "密码错误,请重试"
 		this.TplName = "login.html"
 		return
+	}
+
+	// 判断用户是否勾选了记住用户名
+	check := this.GetString("check")
+	beego.Info(check)
+	// 勾选了,记住一小时
+	if check == "on" {
+		this.Ctx.SetCookie("username", usr, 3600)
+	} else {
+		// 没有勾选,清除数据
+		this.Ctx.SetCookie("username", usr, -1)
 	}
 
 	// 跳转到主页
