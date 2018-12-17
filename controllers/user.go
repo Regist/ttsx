@@ -191,6 +191,9 @@ func (this *UserController) HandleLogin() {
 		this.Ctx.SetCookie("username", usr, -1)
 	}
 
+	// 设置session
+	this.SetSession("userName", usr)
+
 	// 跳转到主页
 	this.Redirect("/", 302)
 }
