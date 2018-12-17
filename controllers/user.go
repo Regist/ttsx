@@ -3,7 +3,9 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
+	"github.com/astaxie/beego/utils"
 	"regexp"
+	"strconv"
 	"ttsx/models"
 )
 
@@ -58,6 +60,27 @@ func (this *UserController) HandleRegister() {
 		this.Data["error"] = "注册失败,请重试"
 		this.TplName = "register.html"
 		return
+	}
+
+	//发送邮件
+	//设置发送人参数,具体设置请参考对应的邮件提供商
+	emailConfig := `{"username":"alphatest1001@163.com","password":"alphatest1001","host":"smtp.163.com","port":25}`
+	mail := utils.NewEMail(emailConfig)
+	// 设置发件人
+	mail.From = "alphatest1001@163.com"
+	// 设置收件人
+	mail.To = []string{email}
+	// 设置邮件主题
+	mail.Subject = "激活账号"
+	// 设置邮件内容,普通文笔
+	mail.Text = "感谢您注册天天生鲜,请复制链接到地址栏进行激活,http://localhost:8080/activie?id=" + strconv.Itoa(user.Id)
+	// 设置邮件内容, html格式, 部分邮箱提供商可能会屏蔽超链接格式内容
+	//	mail.HTML = "<a href=\"感谢您注册天天生鲜,请复制链接到地址栏进行激活,http://localhost:8080/activie?id=" + strconv.Itoa(user.Id) + ">点击激活</a>"
+
+	// 发送邮件
+	err = mail.Send()
+	if err != nil {
+		beego.Error(err)
 	}
 
 	// 插入成功
