@@ -84,6 +84,41 @@ func (this *UserController) HandleRegister() {
 	}
 
 	// 插入成功
-	this.Ctx.WriteString("注册成功")
+	this.Ctx.WriteString("注册成功,请查收激活邮件")
 
+}
+
+// 处理激活
+func (this *UserController) HandleActive() {
+	// 获取ID
+	id, err := this.GetInt("id")
+	if err != nil {
+		this.Data["error"] = "激活失败,请重新注册"
+		this.TplName = "register.html"
+		return
+	}
+
+	ormer := orm.NewOrm()
+
+	// 根据ID查询用户是否存在
+	var user models.User
+	user.Id = id
+	err = ormer.Read(&user)
+	if err != nil {
+		this.Data["error"] = "激活失败,请重新注册"
+		this.TplName = "register.html"
+		return
+	}
+
+	// 激活用户
+	user.Active = true
+	_, err = ormer.Update(&user)
+	if err != nil {
+		this.Data["error"] = "激活失败,请重新注册"
+		this.TplName = "register.html"
+		return
+	}
+
+	// 激活成功,跳转到登陆界面
+	this.Redirect("/login.html", 302)
 }
