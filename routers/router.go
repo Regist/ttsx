@@ -11,4 +11,6 @@ func init() {
 	beego.Router("/register", &controllers.UserController{}, "get:ShowRegister;post:HandleRegister")
 	// 激活路由
 	beego.Router("/activie", &controllers.UserController{}, "get:HandleActive")
+	// 展示登陆页面
+	beego.Router("/login", &controllers.UserController{}, "get:ShowLogin")
 }

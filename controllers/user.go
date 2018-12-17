@@ -120,5 +120,10 @@ func (this *UserController) HandleActive() {
 	}
 
 	// 激活成功,跳转到登陆界面
-	this.Redirect("/login.html", 302)
+	this.Redirect("/login", 302)
+}
+
+// 展示登陆页面
+func (this *UserController) ShowLogin() {
+	this.TplName = "login.html"
 }
