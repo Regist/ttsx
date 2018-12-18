@@ -23,6 +23,12 @@ func init() {
 	beego.Router("/login", &controllers.UserController{}, "get:ShowLogin;post:HandleLogin")
 	// 退出登陆
 	beego.Router("/user/logout", &controllers.UserController{}, "get:Logout")
+	// 用户中心_个人中心
+	beego.Router("/user/usercenter", &controllers.UserController{}, "get:ShowUserCenter")
+	// 用户中心_全部订单
+	beego.Router("/user/usercenterOrder", &controllers.UserController{}, "get:ShowUserOrders")
+	// 用户中心_收货地址
+	beego.Router("/user/usercenterAddress", &controllers.UserController{}, "get:ShowUserAddresses")
 }
 
 // 检查登陆状态的过滤器

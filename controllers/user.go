@@ -205,3 +205,37 @@ func (this *UserController) Logout() {
 	// 跳转到主页
 	this.Redirect("/", 302)
 }
+
+// 抽取方法,用于设置用户中心的公共部分
+func showLayout(this *UserController) {
+	// 获取session
+	userName := this.GetSession("userName")
+	// 设置用户名
+	this.Data["username"] = userName.(string)
+	// 设置布局
+	this.Layout = "user_center_layout.html"
+}
+
+// 展示用户中心_个人信息
+func (this *UserController) ShowUserCenter() {
+
+	showLayout(this)
+	this.TplName = "user_center_info.html"
+
+}
+
+// 展示用户中心_全部订单
+func (this *UserController) ShowUserOrders() {
+
+	showLayout(this)
+	this.TplName = "user_center_order.html"
+
+}
+
+// 展示用户中心_收货地址
+func (this *UserController) ShowUserAddresses() {
+
+	showLayout(this)
+	this.TplName = "user_center_site.html"
+
+}
