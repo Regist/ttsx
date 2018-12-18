@@ -21,6 +21,8 @@ func init() {
 	beego.Router("/activie", &controllers.UserController{}, "get:HandleActive")
 	// 展示登陆页面
 	beego.Router("/login", &controllers.UserController{}, "get:ShowLogin;post:HandleLogin")
+	// 退出登陆
+	beego.Router("/user/logout", &controllers.UserController{}, "get:Logout")
 }
 
 // 检查登陆状态的过滤器

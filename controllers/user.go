@@ -197,3 +197,11 @@ func (this *UserController) HandleLogin() {
 	// 跳转到主页
 	this.Redirect("/", 302)
 }
+
+// 退出登陆
+func (this *UserController) Logout() {
+	// 清空session
+	this.DelSession("userName")
+	// 跳转到主页
+	this.Redirect("/", 302)
+}
