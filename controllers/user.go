@@ -219,6 +219,18 @@ func showLayout(this *UserController) {
 // 展示用户中心_个人信息
 func (this *UserController) ShowUserCenter() {
 
+	// 获取用户名
+	userName := this.GetSession("userName")
+	ormer := orm.NewOrm()
+	var address models.Address
+	err := ormer.QueryTable("Address").RelatedSel("User").Filter("User__Name", userName.(string)).Filter("Isdefault", true).One(&address)
+
+	if err != nil {
+		this.Data["address"] = ""
+	} else {
+		this.Data["address"] = address
+	}
+
 	showLayout(this)
 	this.TplName = "user_center_info.html"
 
