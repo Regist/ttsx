@@ -234,8 +234,63 @@ func (this *UserController) ShowUserOrders() {
 
 // 展示用户中心_收货地址
 func (this *UserController) ShowUserAddresses() {
+	// 获取当前用户的用户名
+	userName := this.GetSession("userName")
+
+	// 根据用户名查询默认地址
+	ormer := orm.NewOrm()
+	var address models.Address
+	ormer.QueryTable("Address").RelatedSel("User").Filter("User__Name", userName.(string)).Filter("Isdefault", true).One(&address)
+
+	this.Data["address"] = address
 
 	showLayout(this)
 	this.TplName = "user_center_site.html"
+}
 
+// 添加新收货地址
+func (this *UserController) AddNewAddress() {
+	// 获取数据
+	receiver := this.GetString("receiver")
+	address := this.GetString("address")
+	postcode := this.GetString("postcode")
+	mobi := this.GetString("mobi")
+	//判断数据是否为空
+	if receiver == "" || address == "" || postcode == "" || mobi == "" {
+		beego.Error("数据不能为空")
+		this.Redirect("/user/usercenterAddress", 302)
+		return
+	}
+
+	ormer := orm.NewOrm()
+
+	// 获取当前用户
+	userName := this.GetSession("userName")
+	var user models.User
+	user.Name = userName.(string)
+	ormer.Read(&user, "Name")
+
+	// 封装数据
+	var newAddress models.Address
+	newAddress.Receiver = receiver
+	newAddress.Addr = address
+	newAddress.Zipcode = postcode
+	newAddress.Phone = mobi
+	newAddress.User = &user
+	newAddress.Isdefault = true
+	// 判断是否已经有默认地址
+	// 无默认地址,将当前地址设置为默认地址
+	// 有默认地址,将当前地址设置为默认地址,将之前的默认地址标志位设置为false
+
+	var oldAddress models.Address
+	err := ormer.QueryTable("Address").RelatedSel("User").Filter("User__Id", user.Id).Filter("Isdefault", true).One(&oldAddress)
+	if err == nil {
+		oldAddress.Isdefault = false
+		ormer.Update(&oldAddress)
+	}
+
+	// 添加数据
+	ormer.Insert(&newAddress)
+
+	this.Redirect("/user/usercenterAddress", 302)
 }
