@@ -68,27 +68,25 @@
 
 <div class="center_con clearfix">
     <ul class="subnav fl">
-        <li><a href="/static/#model01" class="fruit">新鲜水果</a></li>
-        <li><a href="/static/#model02" class="seafood">海鲜水产</a></li>
-        <li><a href="/static/#model03" class="meet">猪牛羊肉</a></li>
-        <li><a href="/static/#model04" class="egg">禽类蛋品</a></li>
-        <li><a href="/static/#model05" class="vegetables">新鲜蔬菜</a></li>
-        <li><a href="/static/#model06" class="ice">速冻食品</a></li>
+        {{range .goodTypes}}
+            <li><a href="#" class="{{.Logo}}">{{.Name}}</a></li>
+        {{end}}
     </ul>
     <div class="slide fl">
         <ul class="slide_pics">
-            <li><img src="/static/images/slide.jpg" alt="幻灯片"></li>
-            <li><img src="/static/images/slide02.jpg" alt="幻灯片"></li>
-            <li><img src="/static/images/slide03.jpg" alt="幻灯片"></li>
-            <li><img src="/static/images/slide04.jpg" alt="幻灯片"></li>
+            {{range .indexGoodsBanners}}
+                <li><img src="http://192.168.166.55:8888/{{.Image}}" alt="幻灯片"/></li>
+            {{end}}
         </ul>
         <div class="prev"></div>
         <div class="next"></div>
         <ul class="points"></ul>
     </div>
     <div class="adv fl">
-        <a href="/static/#"><img src="/static/images/adv01.jpg"></a>
-        <a href="/static/#"><img src="/static/images/adv02.jpg"></a>
+        {{range .indexPromotionBanners}}
+            <a href="{{.Url}}"><img src="http://192.168.166.55:8888/{{.Image}}"></a>
+        {{end}}
+
     </div>
 </div>
 
